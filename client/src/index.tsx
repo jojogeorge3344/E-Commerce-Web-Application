@@ -1,18 +1,20 @@
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import React from 'react'; // Import React
-import App from './app/layout/App';
-import './app/layout/style.css'
+import './app/layout/style.css';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
+import { RouterProvider } from 'react-router-dom';
+import { router } from './app/Router/Routes';
 
 const container = document.getElementById('root') as HTMLElement; // Type assertion
 const root = createRoot(container); // Create root instance
 
-root.render(
+const App = (
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+root.render(App); // Render the app using root
