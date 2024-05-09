@@ -15,10 +15,11 @@ private readonly StoreContext _storeContext;
             _storeContext = storeContext;
         }
 
-        [HttpGet(Name = "GetAllProducts")]
+        [HttpGet(Name = "GetProducts")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            return await _storeContext.Products.ToListAsync();
+            var jo= await _storeContext.Products.ToListAsync();
+            return jo.ToList();
         }
 
         [HttpGet("{id}", Name = "GetProduct")]

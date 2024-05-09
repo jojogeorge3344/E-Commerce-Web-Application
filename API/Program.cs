@@ -10,10 +10,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//DB connectionsting configuration
+// DB connection string configuration
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+});
+
+// Configure CORS for different UI requests
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://127.0.0.1:3001")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
@@ -25,14 +37,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection(); 
+// Use CORS policy
+app.UseCors("AllowSpecificOrigins");
+
+// app.UseHttpsRedirection(); 
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-//Using the Program.cs class to migrate and seed the data on app startup
-var scope =app.Services.CreateScope();
+// Using the Program.cs class to migrate and seed the data on app startup
+var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
@@ -42,7 +57,7 @@ try
 }
 catch (Exception ex)
 {
-    logger.LogError(ex, "We have an problem during Migration");
+    logger.LogError(ex, "We have a problem during Migration");
 }
 
 app.Run();
