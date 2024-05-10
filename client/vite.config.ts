@@ -21,8 +21,8 @@ export default defineConfig({
     include: [
       '@sounds/toggle-enable-disable.mp3',
       '@sounds/header-menu-sound.mp3',
-      '@sounds/Dark-Mode-Enable.mp3'
-
+      '@sounds/Dark-Mode-Enable.mp3',
+      '@sounds/Product-View-Sound.mp3'
     ]
   }
 });

@@ -3,9 +3,9 @@ import MaterialUISwitch from "../../app/layout/Switch"
 import { NavLink } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
 import { useState } from "react";
-import brightNotificationSound from '@sounds/toggle-enable-disable.mp3'; // Dark mode toggle switch sound
 import headerMenuClickSound from '@sounds/header-menu-sound.mp3'; // Header menu clicking sound
-import darkModeEnableSound from '@sounds/Dark-Mode-Enable.mp3'; // Dark mode toggle switch sound
+import { speakMessage } from '../../app/layout/SpeakMessage'; // Import speakMessage function
+import toggleClickSound from '@sounds/toggle-enable-disable.mp3'; // Header menu clicking sound
 
 const midLinks = [
     { title: 'catalog', path: '/catalog' },
@@ -39,7 +39,22 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     //Toggle switch popup based on toggle state
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
-    //Toggle switch sound configure based on toggle state
+    // Method to handle click event and speak a message based on toggle switch
+    const darkModeEnableSound = () => {
+        playSound(toggleClickSound); // Play the sound
+        setTimeout(() => {
+            speakMessage(`You are enabled dark mode.`);
+        }, 1000); // Delay execution by one second 
+    };
+
+    const darkModeDisableSound = () => {
+        playSound(toggleClickSound); // Play the sound
+        setTimeout(() => {
+            speakMessage(`You are Disabled dark mode`);
+        }, 1000); // Delay execution by one second 
+    };
+
+    // PlaySound Method for make sound effect while click button and link.
     const playSound = (soundFile: string) => {
         try {
             const sound = new Audio(soundFile);
@@ -48,16 +63,15 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
             console.error('Error playing sound:', error);
         }
     };
-
     // Toggle state checking and throwing message and sound
     const handleDarkModeChange = () => {
         handleThemeChange();
         if (darkMode) {
             setSnackbarMessage('Dark Mode Disabled');
-            playSound(brightNotificationSound); // Use the imported sound file
+            darkModeDisableSound();
         } else {
             setSnackbarMessage('Dark Mode Enabled');
-            playSound(darkModeEnableSound); // Use the imported sound file
+            darkModeEnableSound();
         }
     };
 
@@ -66,11 +80,10 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     };
 
     return (
-
         // sx={{mb:4} is used for setup the pading btw header box and product images.
         <AppBar position='static' sx={{ mb: 3 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box>
+                <Box display='flex' alignItems='center'>
                     {/* configuring Heading */}
                     <Typography variant="h6" component={NavLink}
                         to='/'
@@ -99,7 +112,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     ))}
                 </List>
 
-                <Box>
+                <Box display='flex' alignItems='center'>
                     {/* configuring cart button */}
                     <IconButton
                         size='large'
