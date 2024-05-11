@@ -20,7 +20,8 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.0",
-    "react-speech": "^1.0.2"
+    "react-speech": "^1.0.2",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@mui/icons-material": "^5.15.17",
