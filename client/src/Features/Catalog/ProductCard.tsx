@@ -3,21 +3,32 @@ import { Product } from "../../app/Models/product";
 import { Link } from "react-router-dom";
 import { speakMessage } from '../../app/layout/SpeakMessage'; // Import speakMessage function
 import ViewButtonClickSound from '@sounds/Product-View-Sound.mp3'; // Header menu clicking sound
+import { useState } from "react";
+import agent from "../../app/ErrorHandlers/UIErrorHandler";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+  const [loading, setLoading] = useState(false);
 
+  function handleAddItem(productId: number) {
+    setLoading(true);
+    agent.Basket.addItem(productId)
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false));
+  }
+  
   const playSound = (soundFile: string) => {
     try {
-        const sound = new Audio(soundFile);
-        sound.play();
+      const sound = new Audio(soundFile);
+      sound.play();
     } catch (error) {
-        console.error('Error playing sound:', error);
+      console.error('Error playing sound:', error);
     }
-};
+  };
   // Method to handle click event and speak a message after one second
   const handleClick = () => {
     playSound(ViewButtonClickSound); // Play the sound
@@ -55,7 +66,12 @@ export default function ProductCard({ product }: Props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small"> Add to Cart</Button>
+        <LoadingButton
+          loading={loading}
+          onClick={() => handleAddItem(product.id)}
+          size="small">
+          Add to Cart
+        </LoadingButton>
         <Button
           component={Link} to={`/catalog/${product.id}`}
           size="small"

@@ -1,6 +1,6 @@
 import { AppBar, Badge, Box, IconButton, List, ListItem, Snackbar, Toolbar, Typography } from "@mui/material";
 import MaterialUISwitch from "../../app/layout/Switch"
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ShoppingCart } from "@mui/icons-material";
 import { useState } from "react";
 import headerMenuClickSound from '@sounds/header-menu-sound.mp3'; // Header menu clicking sound
@@ -115,6 +115,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                 <Box display='flex' alignItems='center'>
                     {/* configuring cart button */}
                     <IconButton
+                        component={Link} to='/basket'
                         size='large'
                         edge='start'
                         color='inherit'

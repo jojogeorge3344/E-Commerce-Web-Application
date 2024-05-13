@@ -42,7 +42,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // Use CORS policy
-app.UseCors("AllowSpecificOrigins");
+//app.UseCors("AllowSpecificOrigins");
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://127.0.0.1:3001");
+});
 
 // app.UseHttpsRedirection(); 
 

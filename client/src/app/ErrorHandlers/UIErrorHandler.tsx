@@ -1,3 +1,8 @@
+// Purpose of this Page is mentioned below;
+// UI Error handling 
+// Sending request to API
+// if we have any end point, we should create here.
+
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../Router/Routes";
@@ -5,6 +10,7 @@ import { router } from "../Router/Routes";
 const sleep =()=>new Promise(resolve=>setTimeout(resolve,500));
 
 axios.defaults.baseURL = 'http://localhost:1576/api/';
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -48,6 +54,7 @@ const requests = {
     delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
+// Product EndPonint's API requests creating.
 const Catalog = {
     list: () => requests.get('Product'),
     details: (id: number) => requests.get(`Product/${id}`)
@@ -61,9 +68,18 @@ const TestErrors = {
     getValidationError: () => requests.get('ErrorHandler/validation-error'),
 }
 
+// Basket EndPoint's API requests creating.
+const Basket = {
+    get:() =>requests.get('basket'),
+    addItem:(productId:number,quantity=1)=> requests.post(`basket?productId=${productId}&quantity${quantity}`,{}),
+    removeItem:(productId:number,quantity=1)=> requests.delete(`Basket?productId=${productId}&quantity${quantity}`),
+
+}
+
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;
