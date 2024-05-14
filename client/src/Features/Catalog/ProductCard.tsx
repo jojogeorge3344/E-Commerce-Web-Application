@@ -6,9 +6,11 @@ import ViewButtonClickSound from '@sounds/Product-View-Sound.mp3'; // Header men
 import { useState } from "react";
 import agent from "../../app/ErrorHandlers/UIErrorHandler";
 import { LoadingButton } from "@mui/lab";
+import { Basket } from "../../app/Models/Basket";
 
 interface Props {
   product: Product;
+  basket: Basket
 }
 
 export default function ProductCard({ product }: Props) {

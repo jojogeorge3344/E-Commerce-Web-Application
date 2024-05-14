@@ -14,23 +14,10 @@ namespace API.Controllers
             this.storeContext = storeContext;
         }
 
-        // its not proper way
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
-            // Assuming storeContext is your DbContext
-            var lastInsertedBuyerId = storeContext.Baskets
-                .OrderByDescending(b => b.Id) // Assuming Id is the primary key and represents the insertion order
-                .Select(b => b.BuyerId)
-                .FirstOrDefault();
-
-            // Check if the lastInsertedBuyerId is not null and set it to the Request.Cookies["buyerId"]
-            if (lastInsertedBuyerId != null)
-            {
-                // Set the cookie value
-                Response.Cookies.Append("buyerId", lastInsertedBuyerId);
-            }
-            var basket = await RetrieveBasketLastBuyerId(lastInsertedBuyerId);
+            var basket = await RetrieveBasket();
 
             if (basket == null) return NotFound();
 
@@ -96,14 +83,6 @@ namespace API.Controllers
                     Quantity = item.Quantity
                 }).ToList()
             };
-        }
-        // its not proper way
-        private async Task<Basket> RetrieveBasketLastBuyerId(string buyerid)
-        {
-            return await storeContext.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == buyerid);
         }
     }
 }
